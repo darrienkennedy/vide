@@ -1,5 +1,6 @@
 use std::env;
 use std::process;
+use std::process::Command;
 
 const USAGE: &str = "vide [filepath]";
 
@@ -11,7 +12,7 @@ fn main() {
         process::exit(1);
     }
 
-    let mut editor = process::Command::new("vim").arg(&args[1]).spawn().unwrap();
+    let mut editor = Command::new("vim").arg(&args[1]).spawn().unwrap();
     editor.wait().unwrap();
 }
 
