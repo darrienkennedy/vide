@@ -1,21 +1,27 @@
-use std::env;
-use std::process;
-use std::process::Command;
+mod editor;
 
-const USAGE: &str = "vide [filepath]";
+use clap::Parser;
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    if args.len() == 1 {
-        print_usage();
-        process::exit(1);
-    }
-
-    let mut editor = Command::new("vim").arg(&args[1]).spawn().unwrap();
-    editor.wait().unwrap();
+#[derive(clap::Subcommand)]
+enum Action {
+    Edit,
+    Read,
 }
 
-fn print_usage() {
-    println!("Usage: {}", USAGE);
+#[derive(clap::Parser)]
+struct Args {
+    #[clap(subcommand)]
+    action: Action,
+}
+
+fn main() {
+    let args = Args::parse();
+    let editor = editor::Editor::new();
+
+    let target_file = "/tmp/hello".to_string();
+    if matches!(args.action, Action::Edit) {
+        editor.edit(target_file);
+    } else if matches!(args.action, Action::Read) {
+        editor.read(target_file);
+    }
 }
