@@ -10,6 +10,9 @@ enum Action {
 
 #[derive(clap::Parser)]
 struct Args {
+    #[clap(short, long)]
+    file: String,
+
     #[clap(subcommand)]
     action: Action,
 }
@@ -18,10 +21,9 @@ fn main() {
     let args = Args::parse();
     let editor = editor::Editor::new();
 
-    let target_file = "/tmp/hello".to_string();
     if matches!(args.action, Action::Edit) {
-        editor.edit(target_file);
+        editor.edit(args.file);
     } else if matches!(args.action, Action::Read) {
-        editor.read(target_file);
+        editor.read(args.file);
     }
 }
