@@ -1,3 +1,4 @@
+mod config;
 mod editor;
 
 use clap::Parser;
@@ -18,12 +19,14 @@ struct Args {
 }
 
 fn main() {
+    let conf = config::Config::new();
+
     let args = Args::parse();
     let editor = editor::Editor::new();
 
     if matches!(args.action, Action::Edit) {
-        editor.edit(args.file);
+        editor.edit(args.file, conf);
     } else if matches!(args.action, Action::Read) {
-        editor.read(args.file);
+        editor.read(args.file, conf);
     }
 }
